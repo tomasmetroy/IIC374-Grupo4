@@ -8,15 +8,15 @@ class Board < Observable
   def initialize
     super
 
-    @height = 6  # TO DO: ask the user which heigth (s)he wants
-    @width = 6  # TO DO: ask the user which width (s)he wants
-    @bombs = 12  # TO DO: ask the user for difficulty level
+    @height = 3  # TO DO: ask the user which heigth (s)he wants
+    @width = 3  # TO DO: ask the user which width (s)he wants
+    @bombs = 2  # TO DO: ask the user for difficulty level
 
     # Indicates if the box is visible for the player or not.
-    @state_matrix = Array.new(@heigth) {Array.new(@width, '0')}
+    @state_matrix = Array.new(@height) {Array.new(@width, '0')}
 
     # Indicates the type of the box (may be unknown for the player).
-    @hidden_matrix = Array.new(@height) {Array.new(@witdh, '-')}
+    @hidden_matrix = Array.new(@height) {Array.new(@width, '-')}
 
     fill_board
   end
@@ -28,8 +28,9 @@ class Board < Observable
     true
   end
 
-  def box_with_bomb(row, col)
-    @hidden_matrix[row][column] == '*'
+  def box_with_bomb(row, column)
+    puts "Todo ok con #{row},#{column}"
+    @hidden_matrix[row][column] === '*'
   end
 
   def fill_board_with_bombs
@@ -47,9 +48,9 @@ class Board < Observable
   end
 
   def fill_board_with_numbers
-    (0..@heigth).each do |row|
-      (0..@width).each do |column|
-        bombs_surrounding = bombs_in_surroundings(row, col)
+    (0..@height-1).each do |row|
+      (0..@width-1).each do |column| 
+        bombs_surrounding = bombs_in_surroundings(row, column)
         if @hidden_matrix[row][column] != '*'
           @hidden_matrix[row][column] = bombs_surrounding
         end
@@ -58,16 +59,22 @@ class Board < Observable
   end
 
   def bombs_in_surroundings(row, col)
+    puts "Revisando (#{row},#{col})"
     bombs_surrounding = 0
     (row-1..row+1).each do |row_searched|
       (col-1..col+1).each do |col_searched|
-        if inside_board(row_searched, col_searched)?
-          if box_with_bomb(row_searched, col_searched)?
+        if (row_searched == row) && (col_searched == col)
+          next
+        end
+        if inside_board(row_searched, col_searched)
+          if box_with_bomb(row_searched, col_searched)
             bombs_surrounding += 1
           end
         end
       end
     end
+    puts bombs_surrounding
+    puts
     bombs_surrounding
   end
 
