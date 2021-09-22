@@ -24,11 +24,7 @@ class Board < Observable
   end
 
   def inside_board(row, col)
-    if row.negative?
-      false
-    elsif row >= @height
-      false
-    elsif col.negative?
+    if row.negative? || col.negative? || row >= @height
       false
     else
       (col < @width)
@@ -49,8 +45,6 @@ class Board < Observable
       next unless @hidden_matrix[row][column] != '*'
 
       @hidden_matrix[row][column] = '*'
-
-      # puts "Put bomb in (#{row},#{column})"
       total_bombs += 1
     end
   end
@@ -65,7 +59,6 @@ class Board < Observable
   end
 
   def bombs_in_surroundings(row, col)
-    # puts "Revisando (#{row},#{col})"
     bombs_surrounding = 0
     (row - 1..row + 1).each do |row_searched|
       (col - 1..col + 1).each do |col_searched|
@@ -74,8 +67,6 @@ class Board < Observable
         bombs_surrounding += 1 if inside_board(row_searched, col_searched) && box_with_bomb(row_searched, col_searched)
       end
     end
-    # puts bombs_surrounding
-    # puts
     bombs_surrounding
   end
 
@@ -98,7 +89,7 @@ class Board < Observable
 
   def mark(row, column, notify_observer = true)
     # Changes the state of a box to visible for the player.
-    if @state_matrix[row][column] == '0'
+    if inside_board(row, column) && @state_matrix[row][column] == '0'
       @state_matrix[row][column] = '1'
 
       # If a box with number 0 is marked, unmark all the surrounding boxes.
