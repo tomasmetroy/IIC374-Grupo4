@@ -51,6 +51,8 @@ class Board < Observable
 
       if @hidden_matrix[row][column] != '*'
         @hidden_matrix[row][column] = '*'
+
+        puts "Put bomb in (#{row},#{column})"
         total_bombs += 1
       end
     end
@@ -101,6 +103,29 @@ class Board < Observable
       ' '
     end
   end
+
+  # def get_bomb_positions
+  #   Funcionando OK.
+  #
+  #   (0..@height-1).each do |row|
+  #     (0..@width-1).each do |col|
+  #       if box_with_bomb(row, col)
+  #         puts "Bomb in (#{row},#{col})"
+  #       end
+  #     end
+  #   end
+  # end
+
+  # def get_surrounding_bombs_in_all_positions
+  #   Funcionando OK.
+  #
+  #   (0..@height-1).each do |row|
+  #     (0..@width-1).each do |col|
+  #       surr = bombs_in_surroundings(row, col)
+  #       puts "Bombs surrounding (#{row},#{col}): #{surr}"
+  #     end
+  #   end
+  # end
 
   def mark(row, column)
     # Changes the state of a box to visible for the player.

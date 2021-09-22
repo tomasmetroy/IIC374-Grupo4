@@ -26,7 +26,8 @@ class BoardView < Observer
       print col_number
       print '|' if (col_number < board_model.width)
     end
-    print "|\n"
+    # print "|\n"
+    puts
     print_row(board_model)
     $stdout.flush
   end
