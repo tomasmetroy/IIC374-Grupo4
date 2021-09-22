@@ -10,29 +10,21 @@ class BoardView < Observer
     print_board(board_model)
   end
 
-  # def print
-  #   # matrix.each do |row|
-  #   #   puts row
-  #   # end
-  #   # pp matrix
-  #   matrix.each do |r|
-  #     puts r.each { |p| p }.join(" ")
-  #   end
-  # end
-
   def print_board(board_model)
+    print_board_head(board_model)
+    print_board_rows(board_model)
+  end
+
+  def print_board_head(board_model)
     print '  '
     (0..board_model.width-1).each do |col_number|
       print col_number
       print '|' if (col_number < board_model.width)
     end
-    # print "|\n"
     puts
-    print_row(board_model)
-    $stdout.flush
   end
 
-  def print_row(board_model)
+  def print_board_rows(board_model)
     (0..board_model.height-1).each do |row_number|
       print row_number
       (0..board_model.width-1).each do |matrix_col|
@@ -44,32 +36,37 @@ class BoardView < Observer
   end
 
   def clean
-    # TO DO
+    # Clears the terminal.
+    puts "\e[H\e[2J"
   end
 
   def options_string
     "Elige una coordenada indicándola con el siguiente formato: <#Fila,#Columna>\n"
   end
 
-  def print_options
-    print options_string
-  end
-
   def congratulations_string
     'Felicidades, ganaste! \nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba.'
-  end
-
-  def congratulate
-    clean
-    print congratulations_string
   end
 
   def game_over_string
     "Has encontrado una bomba! Game Over :(\n"
   end
 
+  def print_options
+    # clean
+    puts
+    puts options_string
+  end
+
+  def congratulate
+    # clean
+    puts
+    puts congratulations_string
+  end
+
   def game_over
-    clean
-    print game_over_string
+    # clean
+    puts
+    puts game_over_string
   end
 end

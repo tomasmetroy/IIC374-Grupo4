@@ -5,14 +5,14 @@ require 'matrix'
 
 # Board class that inherets from Observable class
 class Board < Observable
-  attr_accessor :height, :width
+  attr_reader :height, :width
 
   def initialize
     super
 
-    @height = 3  # TO DO: ask the user which heigth (s)he wants
-    @width = 3  # TO DO: ask the user which width (s)he wants
-    @bombs = 2  # TO DO: ask the user for difficulty level
+    @height = 5  # TO DO: ask the user which heigth (s)he wants
+    @width = 5  # TO DO: ask the user which width (s)he wants
+    @bombs = 8  # TO DO: ask the user for difficulty level
 
     # Indicates if the box is visible for the player or not.
     @state_matrix = Array.new(@height) {Array.new(@width, '0')}
@@ -52,7 +52,7 @@ class Board < Observable
       if @hidden_matrix[row][column] != '*'
         @hidden_matrix[row][column] = '*'
 
-        puts "Put bomb in (#{row},#{column})"
+        # puts "Put bomb in (#{row},#{column})"
         total_bombs += 1
       end
     end
@@ -96,36 +96,13 @@ class Board < Observable
 
   def symbol_at(row, column)
     # If the box is visible, returns the type of the box. if not, returns a 
-    # string with a space.
-    if @state_matrix[row][column] === 1
+    # string with a space (simulating non-visibility).
+    if @state_matrix[row][column] === '1'
       @hidden_matrix[row][column]
     else
       ' '
     end
   end
-
-  # def get_bomb_positions
-  #   Funcionando OK.
-  #
-  #   (0..@height-1).each do |row|
-  #     (0..@width-1).each do |col|
-  #       if box_with_bomb(row, col)
-  #         puts "Bomb in (#{row},#{col})"
-  #       end
-  #     end
-  #   end
-  # end
-
-  # def get_surrounding_bombs_in_all_positions
-  #   Funcionando OK.
-  #
-  #   (0..@height-1).each do |row|
-  #     (0..@width-1).each do |col|
-  #       surr = bombs_in_surroundings(row, col)
-  #       puts "Bombs surrounding (#{row},#{col}): #{surr}"
-  #     end
-  #   end
-  # end
 
   def mark(row, column)
     # Changes the state of a box to visible for the player.
