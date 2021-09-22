@@ -22,9 +22,9 @@ class BoardView < Observer
 
   def print_board(board_model)
     print '  '
-    (0..@board_model.width).each do |col_number|
+    (0..board_model.width-1).each do |col_number|
       print col_number
-      print '|' if (col_number < @board_model.width)
+      print '|' if (col_number < board_model.width)
     end
     print "|\n"
     print_row(board_model)
@@ -32,9 +32,9 @@ class BoardView < Observer
   end
 
   def print_row(board_model)
-    (0..@board_model.heigth).each do |row_number|
+    (0..board_model.height-1).each do |row_number|
       print row_number
-      (0..@board_model.width).each do |matrix_col|
+      (0..board_model.width-1).each do |matrix_col|
         print '|'
         print board_model.symbol_at(row_number, matrix_col)
       end

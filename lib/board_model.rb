@@ -5,6 +5,8 @@ require 'matrix'
 
 # Board class that inherets from Observable class
 class Board < Observable
+  attr_accessor :height, :width
+
   def initialize
     super
 
@@ -22,14 +24,21 @@ class Board < Observable
   end
 
   def inside_board(row, col)
-    if (row < 0) || (row >= @height) || (col < 0) || (col >= @width)
+    if row < 0
       false
+    elsif row >= @height
+      false
+    elsif col < 0
+      false
+    elsif col >= @width
+      false
+    else
+      # puts "#{row},#{col} está dentro del tablero."
+      true
     end
-    true
   end
 
   def box_with_bomb(row, column)
-    puts "Todo ok con #{row},#{column}"
     @hidden_matrix[row][column] === '*'
   end
 
@@ -59,22 +68,20 @@ class Board < Observable
   end
 
   def bombs_in_surroundings(row, col)
-    puts "Revisando (#{row},#{col})"
+    # puts "Revisando (#{row},#{col})"
     bombs_surrounding = 0
     (row-1..row+1).each do |row_searched|
       (col-1..col+1).each do |col_searched|
         if (row_searched == row) && (col_searched == col)
           next
         end
-        if inside_board(row_searched, col_searched)
-          if box_with_bomb(row_searched, col_searched)
-            bombs_surrounding += 1
-          end
+        if inside_board(row_searched, col_searched) && box_with_bomb(row_searched, col_searched)
+          bombs_surrounding += 1
         end
       end
     end
-    puts bombs_surrounding
-    puts
+    # puts bombs_surrounding
+    # puts
     bombs_surrounding
   end
 
