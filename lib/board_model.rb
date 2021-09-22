@@ -12,7 +12,7 @@ class Board < Observable
 
     @height = 5  # TO DO: ask the user which heigth (s)he wants
     @width = 5  # TO DO: ask the user which width (s)he wants
-    @bombs = 8  # TO DO: ask the user for difficulty level
+    @bombs = 2  # TO DO: ask the user for difficulty level
 
     # Indicates if the box is visible for the player or not.
     @state_matrix = Array.new(@height) {Array.new(@width, '0')}
@@ -63,7 +63,7 @@ class Board < Observable
       (0..@width-1).each do |column| 
         bombs_surrounding = bombs_in_surroundings(row, column)
         if @hidden_matrix[row][column] != '*'
-          @hidden_matrix[row][column] = bombs_surrounding
+          @hidden_matrix[row][column] = bombs_surrounding.to_s
         end
       end
     end
@@ -104,14 +104,32 @@ class Board < Observable
     end
   end
 
-  def mark(row, column)
+  def mark(row, column, notify_observer=true)
     # Changes the state of a box to visible for the player.
     if @state_matrix[row][column] === '0'
       @state_matrix[row][column] = '1'
+
+      # If a box with number 0 is marked, unmark all the surrounding boxes.
+      if @hidden_matrix[row][column] === '0'
+        (row-1..row+1).each do |new_row|
+          (column-1..column+1).each do |new_col|
+            if (new_row == row) && (new_col == column)
+              next
+            end
+
+            if inside_board(new_row, new_col)
+              mark(new_row, new_col, false)
+            end
+          end
+        end
+      end
+
     else
       print 'Elige una nueva posición, dado que la elegida no es válida.'
     end
-    notify_all
+    if notify_observer
+      notify_all
+    end
   end
 
   def winner

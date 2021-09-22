@@ -56,6 +56,7 @@ class BoardView < Observer
     # clean
     puts
     puts options_string
+    print ">> "
   end
 
   def congratulate

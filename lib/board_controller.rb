@@ -18,7 +18,6 @@ class BoardController
   end
 
   def print_board
-    # @view.clean
     @view.print_board(@model)
   end
 
@@ -42,7 +41,9 @@ class BoardController
     if @model.winner
       @view.congratulate
       exit(0)
-    elsif @model.bomb_explosion
+    end
+
+    if @model.bomb_explosion
       @view.gameOver
       exit(0)
     end
