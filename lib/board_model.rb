@@ -7,24 +7,36 @@ require 'matrix'
 class Board < Observable
   def initialize
     super
-    size = 6
-    @state_matrix = Array.new(size) { Array.new(size, '0') }
-    @hidden_matrix = Array.new(size) { Array.new(size, '-') }
-    @bombs = (size * size / 3).ceil
-    fill_board
+
+    @height = 6
+    @width = 6
+    @bombs = 12
+
+    # EXPLAIN
+    @state_matrix = Array.new(size) {Array.new(size, '0')}
+
+    # EXPLAIN
+    @hidden_matrix = Array.new(size) {Array.new(size, '-')}
+
+    fill_board_with_bombs
   end
 
-  def fill_board
+  def fill_board_with_bombs
     total_bombs = 0
-    while total_bombs <= @bombs
-      column = rand(0..5)
-      row = rand(0..5)
-      if @hidden_matrix[column][row] != '*'
-        @hidden_matrix[column][row] = '*'
+    while total_bombs < @bombs
+      column = rand(@size)
+      row = rand(@size)
+
+      if @hidden_matrix[row][column] != '*'
+        @hidden_matrix[row][column] = '*'
         total_bombs += 1
       end
     end
     # agregar numeros de alrededor en base a las bombas
+  end
+
+  def fill_board_with_numbers
+
   end
 
   def symbol_at(row, column)
@@ -44,7 +56,9 @@ class Board < Observable
     notify_all
   end
 
-  def winner; end
+  def winner
+  end
 
-  def bomb_explosion; end
+  def bomb_explosion
+  end
 end

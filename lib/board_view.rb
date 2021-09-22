@@ -52,11 +52,11 @@ class BoardView < Observer
 
   def congratulate
     clean
-    print 'Felicidades, Ganaste!! Haz logrado destapar todas las casillas sin haberte topado con ninguna bomba'
+    print 'Felicidades, Ganaste!! Has logrado destapar todas las casillas sin haberte topado con ninguna bomba'
   end
 
   def game_over
     clean
-    print "Haz encontrado una bomba! Game Over :(\n"
+    print "Has encontrado una bomba! Game Over :(\n"
   end
 end
