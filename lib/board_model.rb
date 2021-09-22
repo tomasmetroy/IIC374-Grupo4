@@ -5,8 +5,9 @@ require 'matrix'
 
 # Board class that inherets from Observable class
 class Board < Observable
-  def initialize(size = 6)
+  def initialize
     super
+    size = 6
     @state_matrix = Array.new(size) { Array.new(size, '0') }
     @hidden_matrix = Array.new(size) { Array.new(size, '-') }
     @bombs = (size * size / 3).ceil

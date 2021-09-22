@@ -15,9 +15,15 @@ class BoardController
   end
 
   def request_input
-    @view.printOptions
+    @view.print_options
     row, col = $stdin.gets.split(',')
+    row, col = validate_parameter(row, col)
     select(row, col)
+  end
+
+  # TODO: validates parameters (two integers)
+  def validate_parameter(row, col)
+    [row.to_i, col.to_i]
   end
 
   def select(row, col)
