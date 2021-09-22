@@ -12,7 +12,7 @@ class BoardController
   def start_game
     print_board
 
-    while true
+    loop do
       request_input
     end
   end
@@ -43,9 +43,9 @@ class BoardController
       exit(0)
     end
 
-    if @model.bomb_explosion
-      @view.gameOver
-      exit(0)
-    end
+    return unless @model.bomb_explosion
+
+    @view.gameOver
+    exit(0)
   end
 end

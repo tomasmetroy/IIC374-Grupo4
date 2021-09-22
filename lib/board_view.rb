@@ -17,17 +17,17 @@ class BoardView < Observer
 
   def print_board_head(board_model)
     print '  '
-    (0..board_model.width-1).each do |col_number|
+    (0..board_model.width - 1).each do |col_number|
       print col_number
-      print '|' if (col_number < board_model.width)
+      print '|' if col_number < board_model.width
     end
     puts
   end
 
   def print_board_rows(board_model)
-    (0..board_model.height-1).each do |row_number|
+    (0..board_model.height - 1).each do |row_number|
       print row_number
-      (0..board_model.width-1).each do |matrix_col|
+      (0..board_model.width - 1).each do |matrix_col|
         print '|'
         print board_model.symbol_at(row_number, matrix_col)
       end
@@ -56,7 +56,7 @@ class BoardView < Observer
     # clean
     puts
     puts options_string
-    print ">> "
+    print '>> '
   end
 
   def congratulate
