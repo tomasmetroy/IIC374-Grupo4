@@ -8,9 +8,9 @@ class Board < Observable
   def initialize
     super
 
-    @height = 6  # TODO: ask the user which heigth (s)he wants
-    @width = 6  # TODO: ask the user which width (s)he wants
-    @bombs = 12  # TODO: ask the user for difficulty level
+    @height = 6  # TO DO: ask the user which heigth (s)he wants
+    @width = 6  # TO DO: ask the user which width (s)he wants
+    @bombs = 12  # TO DO: ask the user for difficulty level
 
     # Indicates if the box is visible for the player or not.
     @state_matrix = Array.new(@heigth) {Array.new(@width, '0')}
@@ -21,11 +21,15 @@ class Board < Observable
     fill_board
   end
 
-  def fill_board
-    # Fills the board with bombs and numbers indicating how many bombs
-    # there are surrounding that square.
-    fill_board_with_bombs
-    fill_board_with_numbers
+  def inside_board(row, col)
+    if (row < 0) || (row >= @height) || (col < 0) || (col >= @width)
+      false
+    end
+    true
+  end
+
+  def box_with_bomb(row, col)
+    @hidden_matrix[row][column] == '*'
   end
 
   def fill_board_with_bombs
@@ -42,10 +46,6 @@ class Board < Observable
     end
   end
 
-  def box_with_bomb(row, col)
-    @hidden_matrix[row][column] == '*'
-  end
-
   def fill_board_with_numbers
     (0..@heigth).each do |row|
       (0..@width).each do |column|
@@ -55,13 +55,6 @@ class Board < Observable
         end
       end
     end
-  end
-
-  def inside_board(row, col)
-    if (row < 0) || (row >= @height) || (col < 0) || (col >= @width)
-      false
-    end
-    true
   end
 
   def bombs_in_surroundings(row, col)
@@ -75,9 +68,19 @@ class Board < Observable
         end
       end
     end
+    bombs_surrounding
+  end
+
+  def fill_board
+    # Fills the board with bombs and numbers indicating how many bombs
+    # there are surrounding that square.
+    fill_board_with_bombs
+    fill_board_with_numbers
   end
 
   def symbol_at(row, column)
+    # If the box is visible, returns the type of the box. if not, returns a 
+    # string with a space.
     if @state_matrix[row][column] === 1
       @hidden_matrix[row][column]
     else
@@ -86,10 +89,11 @@ class Board < Observable
   end
 
   def mark(row, column)
+    # Changes the state of a box to visible for the player.
     if @state_matrix[row][column] === '0'
       @state_matrix[row][column] = '1'
     else
-      print 'Elige una nueva posición, dado que la elegida no es una posición correcta'
+      print 'Elige una nueva posición, dado que la elegida no es válida.'
     end
     notify_all
   end

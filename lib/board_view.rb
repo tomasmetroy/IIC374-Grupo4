@@ -22,9 +22,9 @@ class BoardView < Observer
 
   def print_board(board_model)
     print '  '
-    (0..5).each do |col_number|
+    (0..@board_model.width).each do |col_number|
       print col_number
-      print '|' if col_number < 5
+      print '|' if (col_number < @board_model.width)
     end
     print "|\n"
     print_row(board_model)
@@ -32,9 +32,9 @@ class BoardView < Observer
   end
 
   def print_row(board_model)
-    (0..5).each do |row_number|
+    (0..@board_model.heigth).each do |row_number|
       print row_number
-      (0..5).each do |matrix_col|
+      (0..@board_model.width).each do |matrix_col|
         print '|'
         print board_model.symbol_at(row_number, matrix_col)
       end
@@ -43,20 +43,32 @@ class BoardView < Observer
   end
 
   def clean
-    # TODO
+    # TO DO
+  end
+
+  def options_string
+    "Elige una coordenada indicándola con el siguiente formato: <#Fila,#Columna>\n"
   end
 
   def print_options
-    print "Elige una coordenada indicándola con el siguiente formato: <#Fila,#Columna>\n"
+    print options_string
+  end
+
+  def congratulations_string
+    'Felicidades, ganaste! \nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba.'
   end
 
   def congratulate
     clean
-    print 'Felicidades, Ganaste!! Has logrado destapar todas las casillas sin haberte topado con ninguna bomba'
+    print congratulations_string
+  end
+
+  def game_over_string
+    "Has encontrado una bomba! Game Over :(\n"
   end
 
   def game_over
     clean
-    print "Has encontrado una bomba! Game Over :(\n"
+    print game_over_string
   end
 end
