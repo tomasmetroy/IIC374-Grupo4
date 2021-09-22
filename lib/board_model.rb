@@ -42,6 +42,10 @@ class Board < Observable
     end
   end
 
+  def box_with_bomb(row, col)
+    @hidden_matrix[row][column] == '*'
+  end
+
   def fill_board_with_numbers
     (0..@heigth).each do |row|
       (0..@width).each do |column|
@@ -53,7 +57,24 @@ class Board < Observable
     end
   end
 
+  def inside_board(row, col)
+    if (row < 0) || (row >= @height) || (col < 0) || (col >= @width)
+      false
+    end
+    true
+  end
+
   def bombs_in_surroundings(row, col)
+    bombs_surrounding = 0
+    (row-1..row+1).each do |row_searched|
+      (col-1..col+1).each do |col_searched|
+        if inside_board(row_searched, col_searched)?
+          if box_with_bomb(row_searched, col_searched)?
+            bombs_surrounding += 1
+          end
+        end
+      end
+    end
   end
 
   def symbol_at(row, column)
