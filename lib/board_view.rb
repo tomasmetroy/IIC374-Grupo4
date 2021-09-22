@@ -1,12 +1,13 @@
 # frozen_string_literal: true
-require  'matrix'
+
+require 'matrix'
 require_relative './observer/observer'
 
+# Class to implement object that manage the view of the board
 class BoardView < Observer
-
-  def update(boardModel)
-    clean()
-    printBoard(boardModel)
+  def update(board_model)
+    clean
+    print_board(board_model)
   end
 
   # def print
@@ -18,41 +19,44 @@ class BoardView < Observer
   #     puts r.each { |p| p }.join(" ")
   #   end
   # end
-  
-  def printBoard(boardModel)
-    print "  "
-    for col_number in 0..5
-        print  col_number
-        print "|" if col_number < 5
+
+  def print_board(board_model)
+    print '  '
+    (0..5).each do |col_number|
+      print col_number
+      print '|' if col_number < 5
     end
     print "|\n"
-    for row_number in 0..5
-        print row_number 
-        for matrix_col in 0..5
-            print "|"
-            print boardModel.symbolAt(row_number,matrix_col)
-        end
-        print "|\n"
+    print_row(board_model)
+    $stdout.flush
+  end
+
+  def print_row(board_model)
+    (0..5).each do |row_number|
+      print row_number
+      (0..5).each do |matrix_col|
+        print '|'
+        print board_model.symbol_at(row_number, matrix_col)
+      end
+      print "|\n"
     end
-    STDOUT.flush
   end
 
   def clean
     # TODO
   end
 
-  def printOptions()
+  def print_options
     print "Elige una coordenada indicándola con el siguiente formato: <#Fila,#Columna>\n"
   end
 
-  def congratulate()
-    clean()
-    print "Felicidades, Ganaste!! Haz logrado destapar todas las casillas sin haberte topado con ninguna bomba"
+  def congratulate
+    clean
+    print 'Felicidades, Ganaste!! Haz logrado destapar todas las casillas sin haberte topado con ninguna bomba'
   end
 
-  def gameOver()
-    clean()
+  def game_over
+    clean
     print "Haz encontrado una bomba! Game Over :(\n"
   end
-
 end

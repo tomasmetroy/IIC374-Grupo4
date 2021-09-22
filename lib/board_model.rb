@@ -1,13 +1,15 @@
 # frozen_string_literal: true
+
 require_relative './observer/observable'
 require 'matrix'
 
+# Board class that inherets from Observable class
 class Board < Observable
-
-  def initialize()
-    @state_matrix = Array.new(6) { Array.new(6, '0') }
-    @hidden_matrix = Array.new(6) { Array.new(6, '-') }
-    @bombs = (6 * 6 / 3).ceil
+  def initialize(size = 6)
+    super
+    @state_matrix = Array.new(size) { Array.new(size, '0') }
+    @hidden_matrix = Array.new(size) { Array.new(size, '-') }
+    @bombs = (size * size / 3).ceil
     fill_board
   end
 
@@ -21,32 +23,27 @@ class Board < Observable
         total_bombs += 1
       end
     end
-    # agregar números de al rededor en base a las bombas
+    # agregar numeros de alrededor en base a las bombas
   end
 
-  def symbolAt(xo,yo)
-    if @state_matrix[xo][yo] == 1 
-      @hidden_matrix[xo][yo]
-    else 
-      " "
+  def symbol_at(row, column)
+    if @state_matrix[row][column] == 1
+      @hidden_matrix[row][column]
+    else
+      ' '
     end
   end
 
-  def mark(xo, yo)
-    if @state_matrix[xo][yo] == '0'
-      @state_matrix[xo][yo] = '1'
-    else 
-      # print "Elige una nueva posición, dado que la elegida no es una posición correcta"
+  def mark(row, column)
+    if @state_matrix[row][column] == '0'
+      @state_matrix[row][column] = '1'
+    else
+      print 'Elige una nueva posición, dado que la elegida no es una posición correcta'
     end
-    notifyAll()
+    notify_all
   end
 
-  def winner()
-    
-  end
+  def winner; end
 
-  def bomb_explosion()
-    
-  end
-
+  def bomb_explosion; end
 end
