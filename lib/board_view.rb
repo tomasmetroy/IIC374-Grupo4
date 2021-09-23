@@ -6,7 +6,7 @@ require_relative './observer/observer'
 # Class to implement object that manage the view of the board
 class BoardView < Observer
   def update(board_model)
-    clean
+    # clean
     print_board(board_model)
   end
 
