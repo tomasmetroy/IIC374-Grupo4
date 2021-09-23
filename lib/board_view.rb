@@ -6,35 +6,28 @@ require_relative './observer/observer'
 # Class to implement object that manage the view of the board
 class BoardView < Observer
   def update(board_model)
-    clean
+    # clean
     print_board(board_model)
   end
 
-  # def print
-  #   # matrix.each do |row|
-  #   #   puts row
-  #   # end
-  #   # pp matrix
-  #   matrix.each do |r|
-  #     puts r.each { |p| p }.join(" ")
-  #   end
-  # end
-
   def print_board(board_model)
-    print '  '
-    (0..5).each do |col_number|
-      print col_number
-      print '|' if col_number < 5
-    end
-    print "|\n"
-    print_row(board_model)
-    $stdout.flush
+    print_board_head(board_model)
+    print_board_rows(board_model)
   end
 
-  def print_row(board_model)
-    (0..5).each do |row_number|
+  def print_board_head(board_model)
+    print '  '
+    (0..board_model.width - 1).each do |col_number|
+      print col_number
+      print '|' if col_number < board_model.width
+    end
+    puts
+  end
+
+  def print_board_rows(board_model)
+    (0..board_model.height - 1).each do |row_number|
       print row_number
-      (0..5).each do |matrix_col|
+      (0..board_model.width - 1).each do |matrix_col|
         print '|'
         print board_model.symbol_at(row_number, matrix_col)
       end
@@ -43,20 +36,38 @@ class BoardView < Observer
   end
 
   def clean
-    # TODO
+    # Clears the terminal.
+    puts "\e[H\e[2J"
+  end
+
+  def options_string
+    "Elige una coordenada indicándola con el siguiente formato: <#Fila,#Columna>\n"
+  end
+
+  def congratulations_string
+    'Felicidades, ganaste! \nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba.'
+  end
+
+  def game_over_string
+    "Has encontrado una bomba! Game Over :(\n"
   end
 
   def print_options
-    print "Elige una coordenada indicándola con el siguiente formato: <#Fila,#Columna>\n"
+    # clean
+    puts
+    puts options_string
+    print '>> '
   end
 
   def congratulate
-    clean
-    print 'Felicidades, Ganaste!! Haz logrado destapar todas las casillas sin haberte topado con ninguna bomba'
+    # clean
+    puts
+    puts congratulations_string
   end
 
   def game_over
-    clean
-    print "Haz encontrado una bomba! Game Over :(\n"
+    # clean
+    puts
+    puts game_over_string
   end
 end

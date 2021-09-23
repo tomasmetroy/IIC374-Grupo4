@@ -9,15 +9,24 @@ class BoardController
     @view = board_view
   end
 
+  def start_game
+    print_board
+
+    loop do
+      request_input
+    end
+  end
+
   def print_board
-    @view.clean
     @view.print_board(@model)
   end
 
   def request_input
     @view.print_options
+
     row, col = $stdin.gets.split(',')
     row, col = validate_parameter(row, col)
+
     select(row, col)
   end
 
@@ -28,13 +37,15 @@ class BoardController
 
   def select(row, col)
     @model.mark(row, col)
+
     if @model.winner
       @view.congratulate
-    elsif @model.bomb_explosion
-      @view.gameOver
-    else
-      request_input
+      exit(0)
     end
-    @view.clean
+
+    return unless @model.bomb_explosion
+
+    @view.gameOver
+    exit(0)
   end
 end

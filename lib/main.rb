@@ -7,8 +7,10 @@ require_relative './board_controller'
 require_relative './board_view'
 
 model = Board.new
+
 view = BoardView.new
 model.add_observer(view)
+
 controller = BoardController.new(model, view)
-controller.print_board
-controller.request_input
+
+controller.start_game
