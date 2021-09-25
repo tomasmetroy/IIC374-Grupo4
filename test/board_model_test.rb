@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
+require_relative 'helpers/board_view_stub'
 require_relative '../lib/board_model'
 require 'test/unit'
 
@@ -29,5 +30,30 @@ class BoardTest < Test::Unit::TestCase
                 ['0', '0', '1', ' ', ' ']]
     @board.mark(0, 0, notify_observer: false)
     assert_true(@board.equal(expected))
+  end
+
+  def test_notify_correctly
+    view = BoardViewStub.new
+    @board.add_observer(view)
+    @board.mark(0, 0, notify_observer: true)
+    assert_true(view.board_was_printed)
+  end
+
+  def test_symbol_at_function
+    unmark_symbol = @board.symbol_at(0, 0)
+    assert_equal(unmark_symbol, ' ')
+    @board.mark(0, 0, notify_observer: false)
+    mark_symbol = @board.symbol_at(0, 0)
+    assert_equal(mark_symbol, '0')
+  end
+
+  def test_fill_board_with_bombs
+    normal_board = Board.new
+    bombs_count = 0
+    (0..normal_board.height - 1).each do |row|
+      (0..normal_board.width - 1).each do |column|
+        bombs_count += 1 if normal_board.symbol_at(row, column) == '*'
+      end
+    end
   end
 end
