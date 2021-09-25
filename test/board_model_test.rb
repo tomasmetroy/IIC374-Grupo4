@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
+require_relative 'helpers/board_view_stub'
 require_relative '../lib/board_model'
 require 'test/unit'
 
