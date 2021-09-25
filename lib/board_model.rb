@@ -6,7 +6,7 @@ require 'pp'
 
 # Board class that inherets from Observable class
 class Board < Observable
-  attr_reader :height, :width
+  attr_reader :height, :width, :hidden_matrix
 
   def initialize(test: false)
     super()
@@ -134,7 +134,7 @@ class Board < Observable
   def bomb_explosion; end
 
   # Print hidden Matrix: function use for debuging
-  def print_hidden
-    pp @hidden_matrix
-  end
+  # def print_hidden
+  #   pp @hidden_matrix
+  # end
 end
