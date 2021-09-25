@@ -7,6 +7,7 @@ class BoardViewStub < Observer
   def initialize
     super
     @board_printed = false
+    @options_printed = false
   end
 
   def update(board_model)
@@ -15,6 +16,10 @@ class BoardViewStub < Observer
 
   def print_board(_board_model)
     @board_printed = true
+  end
+
+  def print_options
+    @options_printed = true
   end
 
   def clean
@@ -34,10 +39,6 @@ class BoardViewStub < Observer
     "Has encontrado una bomba! Game Over :(\n"
   end
 
-  def print_options
-    options_string
-  end
-
   def congratulate
     congratulations_string
   end
@@ -48,5 +49,9 @@ class BoardViewStub < Observer
 
   def board_was_printed
     @board_printed
+  end
+
+  def options_were_printed
+    @options_printed
   end
 end
