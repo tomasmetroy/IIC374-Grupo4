@@ -1,4 +1,4 @@
-name: Ruby-testing
+name: Ruby-linters
 
 on:
   push:
@@ -22,5 +22,5 @@ jobs:
           ruby-version: 2.7.3
       - name: Install dependencies
         run: bundle install
-      - name: Run tests
-        run: bundle exec rake test
+      - name: Run linters
+        run: bundle exec rake lint
