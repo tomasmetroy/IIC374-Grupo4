@@ -38,14 +38,14 @@ class BoardController
   def select(row, col)
     @model.mark(row, col)
 
-    if @model.winner
-      @view.congratulate
+    if @model.bomb_explosion(row, col)
+      @view.game_over
       exit(0)
     end
 
-    return unless @model.bomb_explosion
+    return unless @model.winner
 
-    @view.gameOver
+    @view.congratulate
     exit(0)
   end
 end

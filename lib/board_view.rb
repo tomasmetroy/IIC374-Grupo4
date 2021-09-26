@@ -45,7 +45,7 @@ class BoardView < Observer
   end
 
   def congratulations_string
-    'Felicidades, ganaste! \nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba.'
+    "Felicidades, ganaste!\nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba!"
   end
 
   def game_over_string
