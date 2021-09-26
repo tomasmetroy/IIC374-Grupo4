@@ -13,7 +13,7 @@ class Board < Observable
     @test = test
     @height = 5 # TO DO: ask the user which heigth (s)he wants
     @width = 5  # TO DO: ask the user which width (s)he wants
-    @bombs = 6  # TO DO: ask the user for difficulty level
+    @bombs = test ? 3 : 6 # TO DO: ask the user for difficulty level
 
     # Indicates if the box is visible for the player or not.
     @state_matrix = Array.new(@height) { Array.new(@width, '0') }
@@ -130,13 +130,13 @@ class Board < Observable
   end
 
   def winner
-    count = 0
+    @count = 0
     (0..@height - 1).each do |row|
       (0..@width - 1).each do |column|
-        count += 1 if symbol_at(row, column) == ' '
+        @count += 1 if symbol_at(row, column) == ' '
       end
     end
-    count == 3
+    @count == @bombs
   end
 
   def bomb_explosion(row, col)
