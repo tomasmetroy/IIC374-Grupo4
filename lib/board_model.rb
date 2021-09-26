@@ -129,9 +129,19 @@ class Board < Observable
     true
   end
 
-  def winner; end
+  def winner
+    count = 0;
+    (0..@height - 1).each do |row|
+      (0..@width - 1).each do |column|
+        count += 1 if symbol_at(row, column) == ' '
+      end
+    end
+    count == 3
+  end
 
-  def bomb_explosion; end
+  def bomb_explosion(row, col)
+    @hidden_matrix[row][col] == '*'
+  end
 
   # Print hidden Matrix: function use for debuging
   def print_hidden
