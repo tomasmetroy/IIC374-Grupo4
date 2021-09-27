@@ -51,7 +51,6 @@ class Board < Observable
   end
 
   def fill_test_board_with_bombs
-    # [*May take a long while because of randomness.]
     @hidden_matrix[@height - 1][@width - 1] = '*'
     @hidden_matrix[@height - 2][@width - 1] = '*'
     @hidden_matrix[@height - 1][@width - 2] = '*'
@@ -99,25 +98,37 @@ class Board < Observable
     end
   end
 
+  def box_is_visible(row, col)
+    @state_matrix[row][col] == '1'
+  end
+
+  def make_box_visible(row, col)
+    @state_matrix[row][col] = '1'
+  end
+
   def mark(row, column, notify_observer: true)
     # Changes the state of a box to visible for the player.
-    if inside_board(row, column) && @state_matrix[row][column] == '0'
-      @state_matrix[row][column] = '1'
+    if inside_board(row, column) && !box_is_visible(row, column)
+      make_box_visible(row, column)
 
-      # If a box with number 0 is marked, unmark all the surrounding boxes.
+      # If a box with number 0 is marked, mark all the surrounding boxes.
       if @hidden_matrix[row][column] == '0'
-        (row - 1..row + 1).each do |new_row|
-          (column - 1..column + 1).each do |new_col|
-            next if (new_row == row) && (new_col == column)
-
-            mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
-          end
-        end
+        mark_surrounding_boxes(row, column)
       end
     elsif notify_observer
       puts 'Elige una nueva posición, dado que la elegida no es válida.'
     end
     notify_all if notify_observer
+  end
+
+  def mark_surrounding_boxes(row, col)
+    (row - 1..row + 1).each do |new_row|
+      (col - 1..col + 1).each do |new_col|
+        next if (new_row == row) && (new_col == col)
+        
+        mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
+      end
+    end
   end
 
   def equal(other_board)
