@@ -24,9 +24,9 @@ class BoardTest < Test::Unit::TestCase
 
   def test_mark_board_correctly
     expected = [%w[0 0 0 0 0],
-                %w[0 0 0 0 0],
-                %w[0 0 0 1 1],
-                ['0', '0', '1', '3', ' '],
+                %w[0 1 1 1 0],
+                ['0', '1', ' ', '2', '1'],
+                ['0', '1', '2', ' ', ' '],
                 ['0', '0', '1', ' ', ' ']]
     @board.mark(0, 0, notify_observer: false)
     assert_true(@board.equal(expected))
@@ -35,7 +35,7 @@ class BoardTest < Test::Unit::TestCase
   def test_notify_correctly
     view = BoardViewStub.new
     @board.add_observer(view)
-    @board.mark(0, 0, notify_observer: true)
+    @board.mark(0, 0)
     assert_true(view.board_was_printed)
   end
 
@@ -60,6 +60,8 @@ class BoardTest < Test::Unit::TestCase
   def test_win
     assert_false(@board.winner)
     @board.mark(0, 0)
+    @board.mark(3, 4)
+    @board.mark(4, 3)
     assert_true(@board.winner)
   end
 end
