@@ -51,7 +51,6 @@ class Board < Observable
   end
 
   def fill_test_board_with_bombs
-    # [*May take a long while because of randomness.]
     @hidden_matrix[@height - 1][@width - 1] = '*'
     @hidden_matrix[@height - 2][@width - 1] = '*'
     @hidden_matrix[@height - 1][@width - 2] = '*'
@@ -81,11 +80,7 @@ class Board < Observable
   def fill_board(test)
     # Fills the board with bombs and numbers indicating how many bombs
     # there are surrounding that square.
-    if test
-      fill_test_board_with_bombs
-    else
-      fill_board_with_bombs
-    end
+    test ? fill_test_board_with_bombs : fill_board_with_bombs
     fill_board_with_numbers
   end
 
@@ -104,20 +99,22 @@ class Board < Observable
     if inside_board(row, column) && @state_matrix[row][column] == '0'
       @state_matrix[row][column] = '1'
 
-      # If a box with number 0 is marked, unmark all the surrounding boxes.
-      if @hidden_matrix[row][column] == '0'
-        (row - 1..row + 1).each do |new_row|
-          (column - 1..column + 1).each do |new_col|
-            next if (new_row == row) && (new_col == column)
-
-            mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
-          end
-        end
-      end
+      # If a box with number 0 is marked, mark all the surrounding boxes.
+      mark_surrounding_boxes(row, column) if @hidden_matrix[row][column] == '0'
     elsif notify_observer
       puts 'Elige una nueva posición, dado que la elegida no es válida.'
     end
     notify_all if notify_observer
+  end
+
+  def mark_surrounding_boxes(row, col)
+    (row - 1..row + 1).each do |new_row|
+      (col - 1..col + 1).each do |new_col|
+        next if (new_row == row) && (new_col == col)
+
+        mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
+      end
+    end
   end
 
   def equal(other_board)
@@ -139,9 +136,9 @@ class Board < Observable
     count == @bombs
   end
 
-  def bomb_explosion(row, col)
-    @hidden_matrix[row][col] == '*'
-  end
+  # def bomb_explosion(row, col)
+  #   @hidden_matrix[row][col] == '*'
+  # end
 
   # Print hidden Matrix: function use for debuging
   # def print_hidden

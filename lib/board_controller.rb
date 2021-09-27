@@ -38,7 +38,7 @@ class BoardController
   def select(row, col)
     @model.mark(row, col)
 
-    if @model.bomb_explosion(row, col)
+    if @model.box_with_bomb(row, col)
       @view.game_over
       exit(0)
     end
