@@ -58,7 +58,6 @@ class BoardTest < Test::Unit::TestCase
   end
 
   def test_win
-    puts "test win: #{@board.winner}"
     assert_false(@board.winner)
     @board.mark(0, 0)
     assert_true(@board.winner)

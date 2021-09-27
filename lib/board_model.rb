@@ -130,13 +130,13 @@ class Board < Observable
   end
 
   def winner
-    @count = 0
+    count = 0
     (0..@height - 1).each do |row|
       (0..@width - 1).each do |column|
-        @count += 1 if symbol_at(row, column) == ' '
+        count += 1 if symbol_at(row, column) == ' '
       end
     end
-    @count == @bombs
+    count == @bombs
   end
 
   def bomb_explosion(row, col)
