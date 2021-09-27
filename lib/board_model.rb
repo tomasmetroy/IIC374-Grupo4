@@ -80,11 +80,7 @@ class Board < Observable
   def fill_board(test)
     # Fills the board with bombs and numbers indicating how many bombs
     # there are surrounding that square.
-    if test
-      fill_test_board_with_bombs
-    else
-      fill_board_with_bombs
-    end
+    test ? fill_test_board_with_bombs : fill_board_with_bombs
     fill_board_with_numbers
   end
 
@@ -98,23 +94,13 @@ class Board < Observable
     end
   end
 
-  def box_is_visible(row, col)
-    @state_matrix[row][col] == '1'
-  end
-
-  def make_box_visible(row, col)
-    @state_matrix[row][col] = '1'
-  end
-
   def mark(row, column, notify_observer: true)
     # Changes the state of a box to visible for the player.
-    if inside_board(row, column) && !box_is_visible(row, column)
-      make_box_visible(row, column)
+    if inside_board(row, column) && @state_matrix[row][column] == '0'
+      @state_matrix[row][column] = '1'
 
       # If a box with number 0 is marked, mark all the surrounding boxes.
-      if @hidden_matrix[row][column] == '0'
-        mark_surrounding_boxes(row, column)
-      end
+      mark_surrounding_boxes(row, column) if @hidden_matrix[row][column] == '0'
     elsif notify_observer
       puts 'Elige una nueva posición, dado que la elegida no es válida.'
     end
@@ -125,7 +111,7 @@ class Board < Observable
     (row - 1..row + 1).each do |new_row|
       (col - 1..col + 1).each do |new_col|
         next if (new_row == row) && (new_col == col)
-        
+
         mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
       end
     end
@@ -150,9 +136,9 @@ class Board < Observable
     count == @bombs
   end
 
-  def bomb_explosion(row, col)
-    @hidden_matrix[row][col] == '*'
-  end
+  # def bomb_explosion(row, col)
+  #   @hidden_matrix[row][col] == '*'
+  # end
 
   # Print hidden Matrix: function use for debuging
   # def print_hidden
