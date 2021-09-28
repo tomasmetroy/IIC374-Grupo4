@@ -64,4 +64,8 @@ class BoardTest < Test::Unit::TestCase
     @board.mark(4, 3)
     assert_true(@board.winner)
   end
+
+  def test_bomb_explosion
+    assert_true(@board.bomb_explosion(4, 4))
+  end
 end

@@ -93,20 +93,22 @@ class Board < Observable
     if inside_board(row, column) && @state_matrix[row][column] == '0'
       @state_matrix[row][column] = '1'
 
-      # If a box with number 0 is marked, unmark all the surrounding boxes.
-      if @hidden_matrix[row][column] == '0'
-        (row - 1..row + 1).each do |new_row|
-          (column - 1..column + 1).each do |new_col|
-            next if (new_row == row) && (new_col == column)
-
-            mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
-          end
-        end
-      end
+      # If a box with number 0 is marked, mark all the surrounding boxes.
+      mark_surrounding_boxes(row, column) if @hidden_matrix[row][column] == '0'
     elsif notify_observer
       puts 'Elige una nueva posición, dado que la elegida no es válida.'
     end
     notify_all if notify_observer
+  end
+
+  def mark_surrounding_boxes(row, col)
+    (row - 1..row + 1).each do |new_row|
+      (col - 1..col + 1).each do |new_col|
+        next if (new_row == row) && (new_col == col)
+
+        mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
+      end
+    end
   end
 
   def equal(other_board)
