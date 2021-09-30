@@ -35,6 +35,11 @@ class BoardView < Observer
     end
   end
 
+  def request_input
+    row, col = $stdin.gets.split(',')
+    [row, col]
+  end
+
   def clean
     # Clears the terminal.
     puts "\e[H\e[2J"

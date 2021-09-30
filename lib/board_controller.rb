@@ -24,7 +24,7 @@ class BoardController
   def request_input
     @view.print_options
 
-    row, col = $stdin.gets.split(',')
+    row, col = @view.request_input
     row, col = validate_parameter(row, col)
 
     select(row, col)
