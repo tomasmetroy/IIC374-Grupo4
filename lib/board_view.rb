@@ -11,6 +11,7 @@ class BoardView < Observer
   end
 
   def print_board(board_model)
+    puts
     print_board_head(board_model)
     print_board_rows(board_model)
   end
@@ -57,6 +58,10 @@ class BoardView < Observer
     "Has encontrado una bomba! Game Over :(\n"
   end
 
+  def invalid_action_string
+    'La posición elegida no es válida.'
+  end
+
   def print_options
     # clean
     puts
@@ -74,5 +79,10 @@ class BoardView < Observer
     # clean
     puts
     puts game_over_string
+  end
+
+  def notify_invalid_action
+    puts
+    print invalid_action_string
   end
 end
