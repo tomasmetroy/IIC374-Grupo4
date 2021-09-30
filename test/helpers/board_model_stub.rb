@@ -4,6 +4,7 @@ require './lib/observer/observable'
 
 class BoardModelStub < Observable
   def initialize
+    super
     @marked = false
     @box_with_bomb_checked = false
     @winner_checked = false

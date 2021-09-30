@@ -68,7 +68,7 @@ class BoardViewStub < Observer
   end
 
   def input_was_requested
-    @request_input
+    @input_requested
   end
 
   def invalid_action_was_notified
