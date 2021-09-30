@@ -36,7 +36,8 @@ class BoardController
   end
 
   def select(row, col)
-    @model.mark(row, col)
+    valid_action = @model.mark(row, col)
+    @view.notify_invalid_action unless valid_action
 
     if @model.box_with_bomb(row, col)
       @view.game_over

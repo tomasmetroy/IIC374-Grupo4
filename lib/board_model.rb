@@ -90,15 +90,17 @@ class Board < Observable
 
   def mark(row, column, notify_observer: true)
     # Changes the state of a box to visible for the player.
+    valid_action = false
     if inside_board(row, column) && @state_matrix[row][column] == '0'
+      valid_action = true
+
       @state_matrix[row][column] = '1'
 
       # If a box with number 0 is marked, mark all the surrounding boxes.
       mark_surrounding_boxes(row, column) if @hidden_matrix[row][column] == '0'
-    elsif notify_observer
-      puts 'Elige una nueva posición, dado que la elegida no es válida.'
     end
     notify_all if notify_observer
+    valid_action
   end
 
   def mark_surrounding_boxes(row, col)
