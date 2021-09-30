@@ -37,7 +37,7 @@ class BoardView < Observer
 
   def request_input
     row, col = $stdin.gets.split(',')
-    return row, col
+    [row, col]
   end
 
   def clean
