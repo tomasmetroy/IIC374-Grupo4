@@ -8,7 +8,6 @@ require 'test/unit'
 require 'stringio'
 
 class ControllerTest < Test::Unit::TestCase
-
   def setup
     @board = Board.new(test: true)
     @view = BoardViewStub.new
@@ -20,6 +19,16 @@ class ControllerTest < Test::Unit::TestCase
     assert_true(@view.board_was_printed)
   end
 
+  def test_validate_parameter
+    row, col = @controller.validate_parameter('1', '1')
+    assert_equal([row, col], [1, 1])
+  end
+
+  def test_validate_parameter_wrong
+    row, col = @controller.validate_parameter('q', '1')
+    assert_not_equal([row, col], [1, 1])
+  end
+
   def test_request_input
     io = StringIO.new
     io.puts '0,0'
@@ -29,5 +38,4 @@ class ControllerTest < Test::Unit::TestCase
     assert_true(@view.options_were_printed)
     $stdin = STDIN
   end
-
 end
