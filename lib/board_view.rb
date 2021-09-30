@@ -11,6 +11,7 @@ class BoardView < Observer
   end
 
   def print_board(board_model)
+    puts
     print_board_head(board_model)
     print_board_rows(board_model)
   end
@@ -35,6 +36,11 @@ class BoardView < Observer
     end
   end
 
+  def request_input
+    row, col = $stdin.gets.split(',')
+    [row, col]
+  end
+
   def clean
     # Clears the terminal.
     puts "\e[H\e[2J"
@@ -45,11 +51,15 @@ class BoardView < Observer
   end
 
   def congratulations_string
-    'Felicidades, ganaste! \nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba.'
+    "Felicidades, ganaste!\nHas logrado destapar todas las casillas sin haberte topado con ninguna bomba!"
   end
 
   def game_over_string
     "Has encontrado una bomba! Game Over :(\n"
+  end
+
+  def invalid_action_string
+    'La posición elegida no es válida.'
   end
 
   def print_options
@@ -69,5 +79,10 @@ class BoardView < Observer
     # clean
     puts
     puts game_over_string
+  end
+
+  def notify_invalid_action
+    puts
+    print invalid_action_string
   end
 end

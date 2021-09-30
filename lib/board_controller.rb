@@ -24,7 +24,7 @@ class BoardController
   def request_input
     @view.print_options
 
-    row, col = $stdin.gets.split(',')
+    row, col = @view.request_input
     row, col = validate_parameter(row, col)
 
     select(row, col)
@@ -36,16 +36,17 @@ class BoardController
   end
 
   def select(row, col)
-    @model.mark(row, col)
+    valid_action = @model.mark(row, col)
+    @view.notify_invalid_action unless valid_action
 
-    if @model.winner
-      @view.congratulate
+    if @model.box_with_bomb(row, col)
+      @view.game_over
       exit(0)
     end
 
-    return unless @model.bomb_explosion
+    return unless @model.winner
 
-    @view.gameOver
+    @view.congratulate
     exit(0)
   end
 end
