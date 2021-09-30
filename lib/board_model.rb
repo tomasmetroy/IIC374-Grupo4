@@ -21,7 +21,7 @@ class Board < Observable
     # Indicates the type of the box (may be unknown for the player).
     @hidden_matrix = Array.new(@height) { Array.new(@width, '-') }
 
-    fill_board(test)
+    fill_board
   end
 
   def inside_board(row, col)
@@ -40,20 +40,14 @@ class Board < Observable
     # [*May take a long while because of randomness.]
     total_bombs = 0
     while total_bombs < @bombs
-      row = rand(@height)
-      column = rand(@width)
+      row = @test ? (@height - total_bombs - 1) : rand(@height)
+      column = @test ? (@width - total_bombs - 1) : rand(@width)
 
       next unless @hidden_matrix[row][column] != '*'
 
       @hidden_matrix[row][column] = '*'
       total_bombs += 1
     end
-  end
-
-  def fill_test_board_with_bombs
-    @hidden_matrix[@height - 1][@width - 1] = '*'
-    @hidden_matrix[@height - 2][@width - 1] = '*'
-    @hidden_matrix[@height - 1][@width - 2] = '*'
   end
 
   def fill_board_with_numbers
@@ -77,10 +71,10 @@ class Board < Observable
     bombs_surrounding
   end
 
-  def fill_board(test)
+  def fill_board
     # Fills the board with bombs and numbers indicating how many bombs
     # there are surrounding that square.
-    test ? fill_test_board_with_bombs : fill_board_with_bombs
+    fill_board_with_bombs
     fill_board_with_numbers
   end
 
@@ -136,12 +130,7 @@ class Board < Observable
     count == @bombs
   end
 
-  # def bomb_explosion(row, col)
-  #   @hidden_matrix[row][col] == '*'
-  # end
-
-  # Print hidden Matrix: function use for debuging
-  # def print_hidden
-  #   pp @hidden_matrix
-  # end
+  def bomb_explosion(row, col)
+    @hidden_matrix[row][col] == '*'
+  end
 end
