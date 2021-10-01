@@ -46,6 +46,8 @@ class ControllerTest < Test::Unit::TestCase
     @controller.select(2, 2)
     assert_true(@model.mark_was_called)
     assert_true(@view.invalid_action_was_notified)
+    assert_false(@model.box_with_bomb_was_called)
+    assert_false(@view.game_over_was_called)
   end
 
   def test_request_input
