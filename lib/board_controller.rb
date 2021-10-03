@@ -40,7 +40,7 @@ class BoardController
   def select_decision(row, col)
     if @model.box_with_bomb(row, col)
       @view.game_over
-      exit(0)
+      exit(0) unless @test
     end
 
     return unless @model.winner
