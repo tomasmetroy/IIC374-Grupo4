@@ -46,7 +46,7 @@ class BoardController
     return unless @model.winner
 
     @view.congratulate
-    exit(0)
+    exit(0) unless @test
   end
 
   def select(row, col)
