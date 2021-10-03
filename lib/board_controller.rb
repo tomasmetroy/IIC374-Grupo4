@@ -37,7 +37,7 @@ class BoardController
     [row.to_i, col.to_i]
   end
 
-   def select_decision(row, col)
+  def select_decision(row, col)
     if @model.box_with_bomb(row, col)
       @view.game_over
       exit(0) unless @test
