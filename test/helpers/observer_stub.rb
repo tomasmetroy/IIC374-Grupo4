@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
 # Class to implement observer object in Observer Design Pattern
-class Observer
+class ObserverStub
+  def initialize
+    @updated = false
+  end
+
   def update(_board)
-    raise 'NotImplementedError'
+    @updated = true
+  end
+
+  def was_updated
+    @updated
   end
 end

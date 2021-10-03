@@ -6,14 +6,14 @@ require 'pp'
 
 # Board class that inherets from Observable class
 class Board < Observable
-  attr_reader :height, :width
+  attr_reader :height, :width, :hidden_matrix
 
   def initialize(test: false)
     super()
     @test = test
     @height = 5 # TO DO: ask the user which heigth (s)he wants
     @width = 5  # TO DO: ask the user which width (s)he wants
-    @bombs = 6  # TO DO: ask the user for difficulty level
+    @bombs = test ? 3 : 6 # TO DO: ask the user for difficulty level
 
     # Indicates if the box is visible for the player or not.
     @state_matrix = Array.new(@height) { Array.new(@width, '0') }
@@ -21,7 +21,7 @@ class Board < Observable
     # Indicates the type of the box (may be unknown for the player).
     @hidden_matrix = Array.new(@height) { Array.new(@width, '-') }
 
-    fill_board(test)
+    fill_board
   end
 
   def inside_board(row, col)
@@ -40,21 +40,14 @@ class Board < Observable
     # [*May take a long while because of randomness.]
     total_bombs = 0
     while total_bombs < @bombs
-      row = rand(@height)
-      column = rand(@width)
+      row = @test ? (@height - total_bombs - 1) : rand(@height)
+      column = @test ? (@width - total_bombs - 1) : rand(@width)
 
       next unless @hidden_matrix[row][column] != '*'
 
       @hidden_matrix[row][column] = '*'
       total_bombs += 1
     end
-  end
-
-  def fill_test_board_with_bombs
-    # [*May take a long while because of randomness.]
-    @hidden_matrix[@height - 1][@width - 1] = '*'
-    @hidden_matrix[@height - 2][@width - 1] = '*'
-    @hidden_matrix[@height - 1][@width - 2] = '*'
   end
 
   def fill_board_with_numbers
@@ -78,14 +71,10 @@ class Board < Observable
     bombs_surrounding
   end
 
-  def fill_board(test)
+  def fill_board
     # Fills the board with bombs and numbers indicating how many bombs
     # there are surrounding that square.
-    if test
-      fill_test_board_with_bombs
-    else
-      fill_board_with_bombs
-    end
+    fill_board_with_bombs
     fill_board_with_numbers
   end
 
@@ -101,23 +90,27 @@ class Board < Observable
 
   def mark(row, column, notify_observer: true)
     # Changes the state of a box to visible for the player.
+    valid_action = false
     if inside_board(row, column) && @state_matrix[row][column] == '0'
+      valid_action = true
+
       @state_matrix[row][column] = '1'
 
-      # If a box with number 0 is marked, unmark all the surrounding boxes.
-      if @hidden_matrix[row][column] == '0'
-        (row - 1..row + 1).each do |new_row|
-          (column - 1..column + 1).each do |new_col|
-            next if (new_row == row) && (new_col == column)
-
-            mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
-          end
-        end
-      end
-    elsif notify_observer
-      puts 'Elige una nueva posición, dado que la elegida no es válida.'
+      # If a box with number 0 is marked, mark all the surrounding boxes.
+      mark_surrounding_boxes(row, column) if @hidden_matrix[row][column] == '0'
     end
     notify_all if notify_observer
+    valid_action
+  end
+
+  def mark_surrounding_boxes(row, col)
+    (row - 1..row + 1).each do |new_row|
+      (col - 1..col + 1).each do |new_col|
+        next if (new_row == row) && (new_col == col)
+
+        mark(new_row, new_col, notify_observer: false) if inside_board(new_row, new_col)
+      end
+    end
   end
 
   def equal(other_board)
@@ -129,12 +122,17 @@ class Board < Observable
     true
   end
 
-  def winner; end
+  def winner
+    count = 0
+    (0..@height - 1).each do |row|
+      (0..@width - 1).each do |column|
+        count += 1 if symbol_at(row, column) == ' '
+      end
+    end
+    count == @bombs
+  end
 
-  def bomb_explosion; end
-
-  # Print hidden Matrix: function use for debuging
-  def print_hidden
-    pp @hidden_matrix
+  def bomb_explosion(row, col)
+    @hidden_matrix[row][col] == '*'
   end
 end

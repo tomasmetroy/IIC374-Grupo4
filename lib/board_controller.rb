@@ -4,9 +4,10 @@ require 'matrix'
 
 # Class to manage business info of a board instance
 class BoardController
-  def initialize(board_model, board_view)
+  def initialize(board_model, board_view, test: false)
     @model = board_model
     @view = board_view
+    @test = test
   end
 
   def start_game
@@ -14,6 +15,7 @@ class BoardController
 
     loop do
       request_input
+      break if @test
     end
   end
 
@@ -24,7 +26,7 @@ class BoardController
   def request_input
     @view.print_options
 
-    row, col = $stdin.gets.split(',')
+    row, col = @view.request_input
     row, col = validate_parameter(row, col)
 
     select(row, col)
@@ -35,17 +37,24 @@ class BoardController
     [row.to_i, col.to_i]
   end
 
-  def select(row, col)
-    @model.mark(row, col)
-
-    if @model.winner
-      @view.congratulate
-      exit(0)
+  def select_decision(row, col)
+    if @model.box_with_bomb(row, col)
+      @view.game_over
+      exit(0) unless @test
     end
 
-    return unless @model.bomb_explosion
+    return unless @model.winner
 
-    @view.gameOver
-    exit(0)
+    @view.congratulate
+    exit(0) unless @test
+  end
+
+  def select(row, col)
+    valid_action = @model.mark(row, col)
+    if valid_action
+      select_decision(row, col)
+    else
+      @view.notify_invalid_action
+    end
   end
 end
