@@ -16,4 +16,6 @@ Si se quisieran correr por separado en la aplicación, basta con ingresar
 
 ## Video de explicación del juego
 
-Se puede ver cómo jugar en el siguiente video: 
+Se puede ver cómo jugar en el siguiente video: https://drive.google.com/file/d/1YEMUjmkDvYe16uY7y38qC9zq80sdChdP/view?usp=sharing
+
+DEBE abrirse con un mail UC.
